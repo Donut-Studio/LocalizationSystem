@@ -25,8 +25,8 @@ Extend the file with your languages, keys and values:
 
 | key | en | fr | ge |
 | --- | --- | --- | --- |
-| menu/quit | Quit|Sortie | Verlassen |
-| menu/play | Play|Jouer | Spielen |
+| menu/play | Play | Jouer | Spielen |
+| menu/quit | Quit | Sortie | Verlassen |
 | game/dialog1 | Welcome adventurer! | Bienvenue aventurier! |Willkommen Abenteurer! |
 
 Seperate the keys with `/` to make it easier selecting them.
