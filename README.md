@@ -9,6 +9,8 @@ Feel free to use it anywere in your projects.
 # Installation
 1. download the code or .unitypackage
 2. import everything into your project
+3. add languages and text to the .csv
+4. implement the system into your game
 
 ***
 # Usage
@@ -21,10 +23,10 @@ The following lines contain the key and values for each language.
 The keys must be different from each other.
 Extend the file with your languages, keys and values:
 
-|key|en|fr|ge|
-|menu/quit|Quit|Sortie|Verlassen|
-|menu/play|Play|Jouer|Spielen|
-|game/dialog1|Welcome adventurer!|Bienvenue aventurier!|Willkommen Abenteurer!|
+| key | en | fr | ge |
+| menu/quit | Quit|Sortie | Verlassen |
+| menu/play | Play|Jouer | Spielen |
+| game/dialog1 | Welcome adventurer! | Bienvenue aventurier! |Willkommen Abenteurer! |
 
 Seperate the keys with `/` to make it easier selecting them.
 
