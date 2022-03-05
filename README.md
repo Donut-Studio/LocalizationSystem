@@ -24,6 +24,7 @@ The keys must be different from each other.
 Extend the file with your languages, keys and values:
 
 | key | en | fr | ge |
+| --- | --- | --- | --- |
 | menu/quit | Quit|Sortie | Verlassen |
 | menu/play | Play|Jouer | Spielen |
 | game/dialog1 | Welcome adventurer! | Bienvenue aventurier! |Willkommen Abenteurer! |
