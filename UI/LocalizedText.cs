@@ -1,6 +1,6 @@
 ﻿/*
   Localization system - Extention for Unity to enable localization in your game.
-  Created by Donut Studio, March 05, 2022.
+  Created by Donut Studio, May 29, 2022.
   Released into the public domain.
 */
 
@@ -13,10 +13,8 @@ namespace DonutStudio.Utilities.LocalizationSystem
     [RequireComponent(typeof(Text))]
     public class LocalizedText : MonoBehaviour
     {
-        [SerializeField()]
-        private LocalizedValue key;
-        [SerializeField()]
-        private bool refreshOnChange = true;
+        [SerializeField()] private LocalizedValue key;
+        [SerializeField()] private bool refreshOnChange = true;
 
         private void Awake()
         {
@@ -37,7 +35,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         {
             RefreshText();
         }
-        private void RefreshText()
+        public void RefreshText()
         {
             if (LocalizationSystem.GetLocalizedValue(key.key, out string value))
                 GetComponent<Text>().text = value;

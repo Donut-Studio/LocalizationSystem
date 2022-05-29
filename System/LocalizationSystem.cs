@@ -1,6 +1,6 @@
 ﻿/*
   Localization system - Extention for Unity to enable localization in your game.
-  Created by Donut Studio, March 05, 2022.
+  Created by Donut Studio, May 29, 2022.
   Released into the public domain.
 */
 
@@ -14,7 +14,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         private static bool hasDictionary = false;
         private static Dictionary<string, string> localizedLanguage;
 
-        public static Language language { get; private set; } = Language.English;
+        public static Language Language { get; private set; } = Language.English;
         public static EventHandler onRefresh;
 
         /// <summary>
@@ -24,18 +24,18 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// <param name="refresh">refresh the text afterwards</param>
         public static void SwapLanguage(Language _language, bool refresh = true)
         {
-            if (language == _language && hasDictionary)
+            if (Language == _language && hasDictionary)
                 return;
 
             // create a new CSVLoader object
             CSVLoader csvLoader = new CSVLoader();
 
             // set the language
-            language = _language;
+            Language = _language;
 
             // get all language attributes from the file and set the dictionary according to the selected language
             string[] attributes = csvLoader.GetLanguageAttributes();
-            localizedLanguage = csvLoader.GetDictionaryValues(attributes[(int)language]);
+            localizedLanguage = csvLoader.GetDictionaryValues(attributes[(int)Language]);
 
             hasDictionary = true;
 

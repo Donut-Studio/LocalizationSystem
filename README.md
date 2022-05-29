@@ -48,7 +48,7 @@ public enum Language : int
 To initialise the localization system or swap the language use the following code:
 
 ```csharp
-LocalizationSystem.SwapLanguage(Language.English); // also invokes the onRefresh event
+LocalizationSystem.SwapLanguage(Language.English, true);
 ```
 Make sure to add `using DonutStudio.Utilities.LocalizationSystem;`!
 If you like to update any values after a change, listen to the following event: `LocalizationSystem.onRefresh`
@@ -62,10 +62,10 @@ bool success = LocalizationSystem.GetLocalizedValue("key", out string value);
 
 ---
 For text elements you've already got two scripts: `LocalizedTMPro`, `LocalizedText`
-Just add them to the corresponding game object and you're good to go.
-Select the key via the dropdown and choose wether to update the text on change or not.
+Just add them to the corresponding gameobject and you're good to go.
+Select the key via the search window and choose wether to update the text when the language has changed.
 
-By the way, you can use the dropdown property anywere in your scripts:
+By the way, you can use the search window property anywere in your scripts:
 
 ```csharp
 [SerializeField()]
@@ -76,5 +76,5 @@ To get the key simply type: `key.key;`
 ***
 # Credits
 Localization system - Extention for Unity to enable localization in your game.
-Created by Donut Studio, March 05, 2022.
+Created by Donut Studio, May 29, 2022.
 Released into the public domain.
