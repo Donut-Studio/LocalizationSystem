@@ -33,10 +33,10 @@ Extend the file with your languages, keys and values (preferably with another ap
 | game/dialog1 | Welcome adventurer! | Bienvenue aventurier! | Willkommen Abenteurer! |
 
 The file itself should look like this:
-> key;en;fr;ge
-> menu/play;Play;Jouer;Spielen
-> menu/quit;Quit;Sortie;Verlassen
-> game/dialog1;Welcome adventurer!;Bienvenue aventurier!;Willkommen Abenteurer!
+> key;en;fr;ge \
+> menu/play;Play;Jouer;Spielen \
+> menu/quit;Quit;Sortie;Verlassen \
+> game/dialog1;Welcome adventurer!;Bienvenue aventurier!;Willkommen Abenteurer! \
 
 ---
 Now open the `Language.cs` and add your languages to the enum. 
