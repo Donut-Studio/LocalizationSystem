@@ -35,10 +35,10 @@ Extend the file with your languages, keys and values (preferably with another ap
 The file itself should look like this:
 
 ``
-key;en;fr;ge
-menu/play;Play;Jouer;Spielen
-menu/quit;Quit;Sortie;Verlassen
-game/dialog1;Welcome adventurer!;Bienvenue aventurier!;Willkommen Abenteurer!
+key;en;fr;ge  
+menu/play;Play;Jouer;Spielen  
+menu/quit;Quit;Sortie;Verlassen  
+game/dialog1;Welcome adventurer!;Bienvenue aventurier!;Willkommen Abenteurer!  
 ``
 
 Seperate the keys with `/` to make it easier selecting them.
