@@ -1,6 +1,6 @@
 ﻿/*
   Localization system - Extention for Unity to enable localization in your game.
-  Created by Donut Studio, May 29, 2022.
+  Created by Donut Studio, June 26, 2022.
   Released into the public domain.
 */
 
@@ -22,7 +22,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// </summary>
         /// <param name="_language">the language</param>
         /// <param name="refresh">refresh the text afterwards</param>
-        public static void SwapLanguage(Language _language, bool refresh = true)
+        public static void SetLanguage(Language _language, bool refresh = true)
         {
             if (Language == _language && hasDictionary)
                 return;
