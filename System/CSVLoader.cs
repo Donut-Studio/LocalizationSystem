@@ -1,6 +1,6 @@
 ﻿/*
-  Localization system - Extention for Unity to enable localization in your game.
-  Created by Donut Studio, June 26, 2022.
+  Localization system - Extention for Unity use multiple languages in your game.
+  Created by Donut Studio, September 10, 2022.
   Released into the public domain.
 */
 
@@ -11,6 +11,9 @@ using UnityEngine;
 
 namespace DonutStudio.Utilities.LocalizationSystem
 {
+    /// <summary>
+    /// Class for reading from and writing to the csv file.
+    /// </summary>
     public class CSVLoader
     {
         private readonly char lineSeperator = '\n';
@@ -18,9 +21,11 @@ namespace DonutStudio.Utilities.LocalizationSystem
 
         private TextAsset csvFile;
         
+        /// <summary>
+        /// Create a CSVLoader object and load the csv file from the resources folder.
+        /// </summary>
         public CSVLoader()
         {
-            // load the csv-file
             csvFile = Resources.Load<TextAsset>("localization");
         }
         /// <summary>
@@ -61,7 +66,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// <summary>
         /// Retruns a dictionary with the keys and localized values from one language.
         /// </summary>
-        /// <param name="attributeID">the language attribute</param>
+        /// <param name="attributeID">The language attribute to load from.</param>
         /// <returns></returns>
         public Dictionary<string, string> GetDictionaryValues(string languageAttribute)
         {
@@ -91,10 +96,11 @@ namespace DonutStudio.Utilities.LocalizationSystem
 
                 if (fields.Length > attributeIndex)
                 {
-                    var key = fields[0];
+                    // remove the carriage return to avoid overlapping
+                    var key = fields[0].Replace("\r", "");
                     if (dictionary.ContainsKey(key)) { continue; }
 
-                    var value = fields[attributeIndex];
+                    var value = fields[attributeIndex].Replace("\r", "");
                     dictionary.Add(key, value);
                 }
             }
@@ -107,7 +113,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// Add a new key to the csv file.
         /// </summary>
         /// <param name="key">The key to add.</param>
-        public void Add(string key)
+        public void AddKey(string key)
         {
             File.AppendAllText("Assets/Resources/localization.csv", lineSeperator + key + fieldSeperator);
             UnityEditor.AssetDatabase.Refresh();
@@ -116,7 +122,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// Remove a key and its values from the csv file.
         /// </summary>
         /// <param name="key">The key to remove.</param>
-        public bool Remove(string key)
+        public bool RemoveKey(string key)
         {
             // split the file into the single lines
             string[] lines = csvFile.text.Split(lineSeperator);
@@ -139,6 +145,81 @@ namespace DonutStudio.Utilities.LocalizationSystem
             }
             
             return false;
+        }
+        /// <summary>
+        /// Add a new language to the csv file.
+        /// </summary>
+        /// <param name="language">The language to add.</param>
+        public void AddLanguage(string language)
+        {
+            // split the file into the single lines
+            string[] lines = csvFile.text.Split(lineSeperator);
+
+            // add the language
+            lines[0] += $";{language}";
+            
+            // write the result to the file
+            File.WriteAllText("Assets/Resources/localization.csv", string.Join(lineSeperator.ToString(), lines));
+            UnityEditor.AssetDatabase.Refresh();
+        }
+        /// <summary>
+        /// Remove a language from the csv file.
+        /// </summary>
+        /// <param name="language">The language to remove.</param>
+        public bool RemoveLanguage(string language)
+        {
+            // split the file into the single lines
+            string[] lines = csvFile.text.Split(lineSeperator);
+
+            // get the seperate values from the header
+            List<string> headerV = lines[0].Split(fieldSeperator).ToList();
+            // remove the language from the header values
+            bool success = headerV.Remove(language);
+
+            // join the lines together
+            string header = string.Join(fieldSeperator.ToString(), headerV);
+            List<string> linesN = lines.ToList();
+            linesN.RemoveAt(0);
+            
+            File.WriteAllText("Assets/Resources/localization.csv", header + lineSeperator + string.Join(lineSeperator.ToString(), linesN));
+            UnityEditor.AssetDatabase.Refresh();
+            return success;
+        }
+        /// <summary>
+        /// Sort the keys of the csv file.
+        /// </summary>
+        public void SortFile()
+        {
+            // split the file into lines and remove the header
+            List<string> lines = csvFile.text.Split(lineSeperator).ToList();
+            string header = lines[0];
+            lines.RemoveAt(0);
+
+            // sort the list
+            lines.Sort((a, b) =>
+            {
+                string[] splits1 = a.Split('/');
+                string[] splits2 = b.Split('/');
+                for (int i = 0; i < splits1.Length; i++)
+                {
+                    if (i >= splits2.Length)
+                        return 1;
+
+                    int value = splits1[i].CompareTo(splits2[i]);
+                    if (value != 0)
+                    {
+                        if (splits1.Length != splits2.Length && (i == splits2.Length - 1 || i == splits2.Length - 1))
+                            return splits1.Length < splits2.Length ? 1 : -1;
+                        return value;
+                    }
+                }
+
+                return 0;
+            });
+
+            // write the result to the file
+            File.WriteAllText("Assets/Resources/localization.csv", header + lineSeperator + string.Join(lineSeperator.ToString(), lines));
+            UnityEditor.AssetDatabase.Refresh();
         }
 #endif
     }

@@ -1,16 +1,16 @@
 ﻿/*
-  Localization system - Extention for Unity to enable localization in your game.
-  Created by Donut Studio, June 26, 2022.
+  Localization system - Extention for Unity use multiple languages in your game.
+  Created by Donut Studio, September 10, 2022.
   Released into the public domain.
 */
 
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro;
 using System;
 
 namespace DonutStudio.Utilities.LocalizationSystem
 {
-    [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof(TextMeshProUGUI))]
     public class LocalizedText : MonoBehaviour
     {
         [SerializeField()] private LocalizedValue key;
@@ -39,8 +39,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         }
         public void RefreshText()
         {
-            if (LocalizationSystem.GetLocalizedValue(key.key, out string value))
-                GetComponent<Text>().text = value;
+            key.SetTMP(GetComponent<TextMeshProUGUI>());
         }
     }
 }
