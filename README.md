@@ -63,10 +63,11 @@ use the following code:
 ```csharp
 LocalizationSystem.Initialize();
 ```
-This should be done once at the start of the game.
 
----
-Now you are able to select a language:
+This should be done once at the start of the game.
+However, if you call other methods from the class and the system is not initialized, 
+it will try and initialize it first. So selecting a language at the start of the game should do the trick:
+
 ```csharp
 LocalizationSystem.SetLanguage(0, true); // in this example you will select English (index => 0)
 ```
@@ -111,6 +112,6 @@ Those should be added later with your preferred application.
 
 ***
 # Credits
-Localization system - Extention for Unity use multiple languages in your game.
-Created by Donut Studio, September 10, 2022.
+Localization system - Extention for Unity to use multiple languages in your game.
+Created by Donut Studio, August 14, 2023.
 Released into the public domain.

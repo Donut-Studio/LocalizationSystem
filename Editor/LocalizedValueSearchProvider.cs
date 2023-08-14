@@ -1,6 +1,6 @@
 ﻿/*
-  Localization system - Extention for Unity use multiple languages in your game.
-  Created by Donut Studio, September 10, 2022.
+  Localization system - Extention for Unity to use multiple languages in your game.
+  Created by Donut Studio, August 09, 2023.
   Released into the public domain.
 */
 
@@ -10,17 +10,17 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace DonutStudio.Utilities.LocalizationSystem
+namespace DonutStudio.LocalizationSystem
 {
     public class LocalizedValueSearchProvider : ScriptableObject, ISearchWindowProvider
     {
-        private string[] keys;
-        private Action<string> onSetIndexCallback;
+        private string[] _keys;
+        private Action<string> _onSetIndexCallback;
 
-        public LocalizedValueSearchProvider(string[] _keys, Action<string> callback)
+        public LocalizedValueSearchProvider(string[] keys, Action<string> callback)
         {
-            keys = _keys;
-            onSetIndexCallback = callback;
+            _keys = keys;
+            _onSetIndexCallback = callback;
         }
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
@@ -30,7 +30,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
             
             // create the search tree for the keys
             List<string> groups = new List<string>();
-            foreach(string item in keys)
+            foreach(string item in _keys)
             {
                 string[] entryTitle = item.Split('/');
                 string groupName = "";
@@ -56,7 +56,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         }
         public bool OnSelectEntry(SearchTreeEntry SearchTreeEntry, SearchWindowContext context)
         {
-            onSetIndexCallback?.Invoke((string)SearchTreeEntry.userData);
+            _onSetIndexCallback?.Invoke((string)SearchTreeEntry.userData);
             return true;
         }
     }

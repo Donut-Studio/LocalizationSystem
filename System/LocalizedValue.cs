@@ -1,32 +1,34 @@
 ﻿/*
-  Localization system - Extention for Unity use multiple languages in your game.
-  Created by Donut Studio, September 10, 2022.
+  Localization system - Extention for Unity to use multiple languages in your game.
+  Created by Donut Studio, August 09, 2023.
   Released into the public domain.
 */
 
 using TMPro;
 
-namespace DonutStudio.Utilities.LocalizationSystem
+namespace DonutStudio.LocalizationSystem
 {
+    /// <summary>
+    /// Class for easier usage of the localization system in the editor
+    /// </summary>
     [System.Serializable()]
     public class LocalizedValue
     {
         public string key;
 
         /// <summary>
-        /// Returns the value of the key.
+        /// Get the value of the key.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The value of the key on success, or the key on failure.</returns>
         public string GetValue()
         {
-            LocalizationSystem.GetLocalizedValue(key, out string value);
-            return value;
+            return LocalizationSystem.GetLocalizedValue(key);
         }
         /// <summary>
-        /// Returns true if a value for the key was found and false if not.
+        /// Try to get the localized string by a key.
         /// </summary>
-        /// <param name="value">The value of the key.</param>
-        /// <returns></returns>
+        /// <param name="value">The localized value.</param>
+        /// <returns>True on sucess, false on failure.</returns>
         public bool GetValue(out string value)
         {
             return LocalizationSystem.GetLocalizedValue(key, out value);
@@ -36,19 +38,10 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// Sets the font and text of a tmp text element.
         /// </summary>
         /// <param name="uiElement">The tmp text element.</param>
-        /// <returns>Returns true on sucess and false when failed.</returns>
+        /// <returns>True on sucess, false on failure.</returns>
         public bool SetTMP(TextMeshProUGUI uiElement)
         {
             return LocalizationSystem.SetTMP(uiElement, key);
-        }
-        /// <summary>
-        /// Sets the text of a tmp text element.
-        /// </summary>
-        /// <param name="uiElement">The tmp text element.</param>
-        /// <returns>Returns true on sucess and false when failed.</returns>
-        public bool SetText(TextMeshProUGUI uiElement)
-        {
-            return LocalizationSystem.SetText(uiElement, key);
         }
     }
 }

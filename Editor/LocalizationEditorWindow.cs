@@ -1,6 +1,6 @@
 ﻿/*
-  Localization system - Extention for Unity use multiple languages in your game.
-  Created by Donut Studio, September 10, 2022.
+  Localization system - Extention for Unity to use multiple languages in your game.
+  Created by Donut Studio, August 09, 2023.
   Released into the public domain.
 */
 
@@ -8,33 +8,35 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace DonutStudio.Utilities.LocalizationSystem
+namespace DonutStudio.LocalizationSystem
 {
     public class LocalizationEditorWindow : EditorWindow
     {
-        private static LocalizationEditorWindow instance;
-        private static LocalizationSystemConfig config;
-        private static TextAsset csvFile;
+        private static LocalizationEditorWindow _instance;
+        private static LocalizationSystemConfig _config;
+        private static TextAsset _csvFile;
 
         [MenuItem("Donut Studio/Open Localizer")]
         public static void Open()
         {
-            if (instance != null)
+            if (_instance != null)
                 return;
 
-            instance = new LocalizationEditorWindow
+            _instance = new LocalizationEditorWindow
             {
                 titleContent = new GUIContent("Localizer"),
                 minSize = new Vector2(400, 85),
                 maxSize = new Vector2(400, 85)
             };
-            instance.ShowUtility();
+            _instance.ShowUtility();
         }
 
-        string keyValue = "";
-        string languageValue = "";
+        private string _keyValue = "";
+        private string _languageValue = "";
         public void OnGUI()
         {
+            EditorGUILayout.Space();
+
             #region Sort
             EditorGUILayout.BeginHorizontal();
             if (GUI.Button(EditorGUILayout.GetControlRect(), "Sort"))
@@ -50,21 +52,22 @@ namespace DonutStudio.Utilities.LocalizationSystem
             #region Add/Remove Language
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Language", GUILayout.MaxWidth(75));
-            languageValue = EditorGUILayout.TextField(languageValue, GUILayout.MaxWidth(175));
-            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Add") && !string.IsNullOrWhiteSpace(languageValue))
+            _languageValue = EditorGUILayout.TextField(_languageValue, GUILayout.MaxWidth(175));
+            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Add") && !string.IsNullOrWhiteSpace(_languageValue))
             {
                 CSVLoader csvLoader = new CSVLoader();
-                csvLoader.AddLanguage(languageValue);
-
-                Debug.Log($"Localizer: added language '{languageValue}'.");
-            }
-            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Remove") && !string.IsNullOrWhiteSpace(languageValue))
-            {
-                CSVLoader csvLoader = new CSVLoader();
-                if (csvLoader.RemoveLanguage(languageValue))
-                    Debug.Log($"Localizer: removed language '{languageValue}'.");
+                if (csvLoader.AddLanguage(_languageValue))
+                    Debug.Log($"Localizer: successfully added language '{_languageValue}'.");
                 else
-                    Debug.LogError($"Localizer: failed to remove language '{languageValue}'.");
+                    Debug.LogError($"Localizer: failed to add language '{_languageValue}'.");
+            }
+            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Remove") && !string.IsNullOrWhiteSpace(_languageValue))
+            {
+                CSVLoader csvLoader = new CSVLoader();
+                if (csvLoader.RemoveLanguage(_languageValue))
+                    Debug.Log($"Localizer: successfully removed language '{_languageValue}'.");
+                else
+                    Debug.LogError($"Localizer: failed to remove language '{_languageValue}'.");
             }
             EditorGUILayout.EndHorizontal();
             #endregion
@@ -74,28 +77,29 @@ namespace DonutStudio.Utilities.LocalizationSystem
             #region Add/Remove Key
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Key", GUILayout.MaxWidth(75));
-            keyValue = EditorGUILayout.TextField(keyValue, GUILayout.MaxWidth(175));
-            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Add") && !string.IsNullOrWhiteSpace(keyValue))
+            _keyValue = EditorGUILayout.TextField(_keyValue, GUILayout.MaxWidth(175));
+            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Add") && !string.IsNullOrWhiteSpace(_keyValue))
             {
                 CSVLoader csvLoader = new CSVLoader();
-                csvLoader.AddKey(keyValue);
-
-                Debug.Log($"Localizer: added key '{keyValue}'.");
-            }
-            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Remove") && !string.IsNullOrWhiteSpace(keyValue))
-            {
-                CSVLoader csvLoader = new CSVLoader();
-                if (csvLoader.RemoveKey(keyValue))
-                    Debug.Log($"Localizer: removed key '{keyValue}'.");
+                if (csvLoader.AddKey(_keyValue))
+                    Debug.Log($"Localizer: successfully added key '{_keyValue}'.");
                 else
-                    Debug.LogError($"Localizer: failed to remove key '{keyValue}'.");
+                    Debug.LogError($"Localizer: failed to add key '{_keyValue}'.");
+            }
+            if (GUI.Button(EditorGUILayout.GetControlRect(GUILayout.MaxWidth(75)), "Remove") && !string.IsNullOrWhiteSpace(_keyValue))
+            {
+                CSVLoader csvLoader = new CSVLoader();
+                if (csvLoader.RemoveKey(_keyValue))
+                    Debug.Log($"Localizer: successfully removed key '{_keyValue}'.");
+                else
+                    Debug.LogError($"Localizer: failed to remove key '{_keyValue}'.");
             }
             EditorGUILayout.EndHorizontal();
             #endregion
         }
         public void OnDestroy()
         {
-            instance = null;
+            _instance = null;
         }
         
         [InitializeOnLoadMethod()]
@@ -108,7 +112,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
             while (true)
             {
                 // is a config file already found
-                if (config != null)
+                if (_config != null)
                     return;
 
                 // get the path of the config file
@@ -122,7 +126,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
                 }
 
                 // load the config file
-                config = AssetDatabase.LoadAssetAtPath<LocalizationSystemConfig>(path);
+                _config = AssetDatabase.LoadAssetAtPath<LocalizationSystemConfig>(path);
                 break;
             }
         }

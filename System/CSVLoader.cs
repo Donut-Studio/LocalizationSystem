@@ -1,6 +1,6 @@
 ﻿/*
-  Localization system - Extention for Unity use multiple languages in your game.
-  Created by Donut Studio, September 10, 2022.
+  Localization system - Extention for Unity to use multiple languages in your game.
+  Created by Donut Studio, August 09, 2023.
   Released into the public domain.
 */
 
@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace DonutStudio.Utilities.LocalizationSystem
+namespace DonutStudio.LocalizationSystem
 {
     /// <summary>
     /// Class for reading from and writing to the csv file.
@@ -19,23 +19,23 @@ namespace DonutStudio.Utilities.LocalizationSystem
         private readonly char lineSeperator = '\n';
         private readonly char fieldSeperator = ';';
 
-        private TextAsset csvFile;
+        private TextAsset _csvFile;
         
         /// <summary>
         /// Create a CSVLoader object and load the csv file from the resources folder.
         /// </summary>
         public CSVLoader()
         {
-            csvFile = Resources.Load<TextAsset>("localization");
+            _csvFile = Resources.Load<TextAsset>("localization");
         }
         /// <summary>
         /// Returns the language attributes from the csv file.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The language attributes as an array of strings.</returns>
         public string[] GetLanguageAttributes()
         {
             // split the file into the header and single fields (attributes)
-            string[] lines = csvFile.text.Split(lineSeperator);
+            string[] lines = _csvFile.text.Split(lineSeperator);
             string[] headers = lines[0].Split(fieldSeperator);
 
             // define a new array with the attributes
@@ -50,31 +50,31 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// <summary>
         /// Returns the keys from the csv file.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>The keys as an array of strings.</returns>
         public string[] GetKeys()
         {
             // split the file into single lines and define the array
-            string[] lines = csvFile.text.Split(lineSeperator);
-            string[] attributes = new string[lines.Length - 1];
+            string[] lines = _csvFile.text.Split(lineSeperator);
+            string[] keys = new string[lines.Length - 1];
 
             // add the keys into the array
             for (int i = 1; i < lines.Length; i++)
-                attributes[i - 1] = lines[i].Split(fieldSeperator)[0];
+                keys[i - 1] = lines[i].Split(fieldSeperator)[0];
 
-            return attributes;
+            return keys;
         }
         /// <summary>
         /// Retruns a dictionary with the keys and localized values from one language.
         /// </summary>
         /// <param name="attributeID">The language attribute to load from.</param>
-        /// <returns></returns>
+        /// <returns>An dictionary with the keys and corresponding values of a language.</returns>
         public Dictionary<string, string> GetDictionaryValues(string languageAttribute)
         {
             // define the dictionary to return
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
             // split the file into the header and single fields (attributes)
-            string[] lines = csvFile.text.Split(lineSeperator);
+            string[] lines = _csvFile.text.Split(lineSeperator);
             string[] headers = lines[0].Split(fieldSeperator);
 
             // find the language attribute it in the header
@@ -113,21 +113,35 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// Add a new key to the csv file.
         /// </summary>
         /// <param name="key">The key to add.</param>
-        public void AddKey(string key)
+        /// <returns>True if the key was added and false if not.</returns>
+        public bool AddKey(string key)
         {
+            // split the file into the single lines
+            string[] lines = _csvFile.text.Split(lineSeperator);
+
+            for (int i = 1; i < lines.Length; i++)
+            {
+                string currentKey = lines[i].Split(fieldSeperator)[0];
+
+                if (currentKey == key)
+                    return false;
+            }
+
             File.AppendAllText("Assets/Resources/localization.csv", lineSeperator + key + fieldSeperator);
             UnityEditor.AssetDatabase.Refresh();
+            return true;
         }
         /// <summary>
         /// Remove a key and its values from the csv file.
         /// </summary>
         /// <param name="key">The key to remove.</param>
+        /// <returns>True if the key was removed and false if not.</returns>
         public bool RemoveKey(string key)
         {
             // split the file into the single lines
-            string[] lines = csvFile.text.Split(lineSeperator);
+            string[] lines = _csvFile.text.Split(lineSeperator);
 
-            // go through all the keys and find the corresponding to remove
+            // go through all the keys and find the corresponding key to remove
             for (int i = 1; i < lines.Length; i++)
             {
                 string currentKey = lines[i].Split(fieldSeperator)[0];
@@ -150,17 +164,22 @@ namespace DonutStudio.Utilities.LocalizationSystem
         /// Add a new language to the csv file.
         /// </summary>
         /// <param name="language">The language to add.</param>
-        public void AddLanguage(string language)
+        /// <returns>True if the language was added and false if it already exists.</returns>
+        public bool AddLanguage(string language)
         {
             // split the file into the single lines
-            string[] lines = csvFile.text.Split(lineSeperator);
+            string[] lines = _csvFile.text.Split(lineSeperator);
 
+            // check if the language already exists
+            if (lines[0].Contains(';' + language))
+                return false;
             // add the language
             lines[0] += $";{language}";
             
             // write the result to the file
             File.WriteAllText("Assets/Resources/localization.csv", string.Join(lineSeperator.ToString(), lines));
             UnityEditor.AssetDatabase.Refresh();
+            return true;
         }
         /// <summary>
         /// Remove a language from the csv file.
@@ -169,7 +188,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         public bool RemoveLanguage(string language)
         {
             // split the file into the single lines
-            string[] lines = csvFile.text.Split(lineSeperator);
+            string[] lines = _csvFile.text.Split(lineSeperator);
 
             // get the seperate values from the header
             List<string> headerV = lines[0].Split(fieldSeperator).ToList();
@@ -191,7 +210,7 @@ namespace DonutStudio.Utilities.LocalizationSystem
         public void SortFile()
         {
             // split the file into lines and remove the header
-            List<string> lines = csvFile.text.Split(lineSeperator).ToList();
+            List<string> lines = _csvFile.text.Split(lineSeperator).ToList();
             string header = lines[0];
             lines.RemoveAt(0);
 
